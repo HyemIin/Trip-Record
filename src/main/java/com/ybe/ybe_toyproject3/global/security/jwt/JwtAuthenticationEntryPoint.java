@@ -40,6 +40,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             result = objectMapper.writeValueAsString(new ErrorResponse(404,
                     "존재하지 않는 멤버입니다."));
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else if (authException instanceof InsufficientAuthenticationException) {
+            result = objectMapper.writeValueAsString(new ErrorResponse(404,
+                    "인증되지 않은 사용자 입니다."));
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
         response.setContentType("application/json");
