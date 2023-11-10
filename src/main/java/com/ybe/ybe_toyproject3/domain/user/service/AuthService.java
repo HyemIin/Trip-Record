@@ -98,12 +98,13 @@ public class AuthService {
         response.addCookie(cookie);
     }
 
-    public String refreshAccessToken(HttpServletRequest request) {
+    public ResponseEntity<String> refreshAccessToken(HttpServletRequest request) {
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);
         Authentication authentication = jwtTokenProvider.getAuthenticationFromRefreshToken(refreshToken);
         String newAccessToken = jwtTokenProvider.generateAccessToken(authentication);
 
         HttpHeaders responseHeaders = createAuthorizationHeader(newAccessToken);
-        return REISSUED;
+        return new ResponseEntity<>(REISSUED, responseHeaders, HttpStatus.OK);
     }
+
 }

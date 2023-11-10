@@ -50,7 +50,7 @@ public class AuthController {
         return ResponseEntity.status(loginResponse.getStatusCode()).headers(headers).body(loginResponse.getBody());
     }
 
-    @Operation(summary = "로그아웃 API", description = "회원 로그아웃 API 입니다.")
+    @Operation(summary = "로그아웃 API", description = "회원 로그아웃 API 현니다.")
     @ApiResponse(responseCode = "200", description = "로그아웃 성공")
     @FailApiResponses
     @PostMapping("/logout")
@@ -58,5 +58,14 @@ public class AuthController {
         ResponseEntity<String> logoutResponse = authService.logout(request, response);
         HttpHeaders headers = logoutResponse.getHeaders(); // 기존 헤더 가져오기
         return ResponseEntity.status(logoutResponse.getStatusCode()).headers(headers).body(logoutResponse.getBody());
+    }
+
+    @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰을 재발급합니다.")
+    @ApiResponse(responseCode = "200", description = "토큰 재발급 성공")
+    @FailApiResponses
+    @PostMapping(value = "/refreshAccessToken")
+    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+        ResponseEntity<String> result = authService.refreshAccessToken(request);
+        return new ResponseEntity<>(result.getBody(), result.getHeaders(), result.getStatusCode());
     }
 }
