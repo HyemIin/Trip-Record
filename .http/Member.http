@@ -1,0 +1,31 @@
+### 회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "testuser@email.com",
+  "name": "testuser",
+  "password": "12341234"
+}
+
+### 로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "testuser@email.com",
+  "password": "12341234"
+}
+
+> {% client.global.set("auth_token", response.headers.valueOf("Authorization")); %}
+
+
+
+### 로그인한 멤버 정보 조회
+GET http://localhost:8080/user
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+### 로그아웃
+POST http://localhost:8080/auth/logout
+Authorization: {{auth_token}}
