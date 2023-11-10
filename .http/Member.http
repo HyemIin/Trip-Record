@@ -1,0 +1,39 @@
+### 회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "testuser@email.com",
+  "name": "testuser",
+  "password": "12341234"
+}
+
+### 로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "email": "testuser@email.com",
+  "password": "12341234"
+}
+
+> {% client.global.set("auth_token", response.headers.valueOf("Authorization")); %}
+
+
+
+### 로그인한 멤버 정보 조회
+GET http://localhost:8080/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjk5NjA1MDQ5LCJhdXRoIjoiUk9MRV9VU0VSIn0.Qy1PUvBgNSxz4UyjbE3_UZKm_SGDOkBEtWqsxuJVG_QfEDMLJumi22z7Qqfb8q30nC6O9ppwE97bTbYvN_mWVA
+
+### 엑세스 재발급
+POST http://localhost:8080/auth/refreshAccessToken
+Authorization: {{auth_token}}
+
+> {% client.global.set("auth_token", response.headers.valueOf("Authorization")); %}
+
+
+### 로그아웃
+POST http://localhost:8080/auth/logout
+Authorization: {{auth_token}}

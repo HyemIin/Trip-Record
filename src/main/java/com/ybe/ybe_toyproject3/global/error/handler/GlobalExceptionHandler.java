@@ -49,6 +49,18 @@ public class GlobalExceptionHandler {
                 , CONFLICT);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected final ResponseEntity<ErrorResponse> handleIllegalArgumentException(
+            IllegalArgumentException ex, WebRequest request
+    ) {
+        return new ResponseEntity<>(
+                ErrorResponse.builder()
+                        .errorCode(CONFLICT.value())
+                        .message(ex.getMessage())
+                        .build()
+                , CONFLICT);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     protected final ResponseEntity<ErrorResponse> handleRuntimeException(
             RuntimeException ex, WebRequest request
