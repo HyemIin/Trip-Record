@@ -26,6 +26,13 @@ GET http://localhost:8080/user
 Content-Type: application/json
 Authorization: {{auth_token}}
 
+### 엑세스 재발급
+POST http://localhost:8080/auth/refreshAccessToken
+Authorization: {{auth_token}}
+
+> {% client.global.set("auth_token", response.headers.valueOf("Authorization")); %}
+
+
 ### 로그아웃
 POST http://localhost:8080/auth/logout
 Authorization: {{auth_token}}
