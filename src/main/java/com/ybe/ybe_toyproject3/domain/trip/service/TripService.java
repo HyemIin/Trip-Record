@@ -86,20 +86,12 @@ public class TripService {
     public TripUpdateResponse editTripById(Long tripId, TripUpdateRequest tripUpdateRequest) {
 
         Integer num = tripRepository.countTripByIdAndTripName(tripId, tripUpdateRequest.getTripName());
-        System.out.println("num = " + num);
-
-
         validateTripUpdateRequest(tripId, tripUpdateRequest);
         Trip trip = tripRepository.findById(tripId).orElseThrow(
                 () -> new TripNotFoundException(NO_TRIP.getMessage())
         );
         Integer numberOfItinerary = getNumberOfItinerary(tripId);
-
-//        trip.setTripName(tripUpdateRequest.getTripName());
-//        trip.setTripType(tripUpdateRequest.getTripType());
-//        trip.setTripStartDate(tripUpdateRequest.getTripStartDate());
-//        trip.setTripEndDate(tripUpdateRequest.getTripEndDate());
-
+        trip.update(tripUpdateRequest);
         return TripUpdateResponse.fromEntity(trip, numberOfItinerary);
     }
 
