@@ -1,5 +1,6 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.request;
 
+import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,5 +22,14 @@ public class TripUpdateRequest {
     private LocalDateTime tripEndDate;
     @NotNull
     private TripType tripType;
+
+    public static Trip toEntity(TripUpdateRequest request) {
+        return Trip.builder()
+                .tripName(request.tripName)
+                .tripStartDate(request.tripStartDate)
+                .tripEndDate(request.tripEndDate)
+                .tripType(request.tripType)
+                .build();
+    }
 
 }

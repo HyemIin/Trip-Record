@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.trip.model;
 import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.likes.model.Likes;
+import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
 import jakarta.persistence.*;
@@ -48,5 +49,12 @@ public class Trip {
         this.tripStartDate = tripStartDate;
         this.tripEndDate = tripEndDate;
         this.tripType = tripType;
+    }
+
+    public void update(TripUpdateRequest request) {
+        this.tripName = request.getTripName();
+        this.tripStartDate = request.getTripStartDate();
+        this.tripEndDate = request.getTripEndDate();
+        this.tripType = request.getTripType();
     }
 }
