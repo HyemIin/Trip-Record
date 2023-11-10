@@ -1,8 +1,11 @@
 package com.ybe.ybe_toyproject3.domain.itinerary.model;
 
+import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.location.model.Location;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
+
 import jakarta.persistence.*;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,12 +33,11 @@ public class Itinerary {
     private LocalDateTime placeArriveTime;
     private LocalDateTime placeDepartTime;
 
-    // @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
 
-    @OneToOne(mappedBy = "itinerary", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "itinerary")
     private Location location;
 
     @Builder
@@ -59,4 +61,22 @@ public class Itinerary {
         this.trip = trip;
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void update(ItineraryUpdateRequest request) {
+        this.itineraryName = request.getItineraryName();
+        this.transportation = request.getTransportation();
+        this.departCity = request.getDepartCity();
+        this.arriveCity = request.getArriveCity();
+        this.cityDepartTime = request.getCityDepartTime();
+        this.cityArriveTime = request.getCityArriveTime();
+        this.accommodation = request.getAccommodation();
+        this.checkInTime = request.getCheckInTime();
+        this.checkOutTime = request.getCheckOutTime();
+        this.placeName = request.getPlaceName();
+        this.placeArriveTime = request.getPlaceArriveTime();
+        this.placeDepartTime = request.getPlaceDepartTime();
+    }
 }
