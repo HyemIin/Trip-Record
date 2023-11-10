@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.user.model;
 import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.likes.model.Likes;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
+import com.ybe.ybe_toyproject3.global.common.Authority;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,9 @@ public class User {
     private String email;
     private String name;
     private String password;
+    @Column(name = "user_authority")
+    @Enumerated(EnumType.STRING)
+    protected Authority authority;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Trip> tripList = new ArrayList<>();
@@ -34,9 +38,10 @@ public class User {
     private final List<Likes> likesList = new ArrayList<>();
 
     @Builder
-    public User(String email, String name, String password) {
+    public User(String email, String name, String password, Authority authority) {
         this.email = email;
         this.name = name;
         this.password = password;
+        this.authority = authority;
     }
 }
