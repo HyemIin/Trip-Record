@@ -11,6 +11,8 @@ public enum ErrorCode {
     NO_TRIP("해당되는 여행이 없습니다."),
     NO_ITINERARY("해당되는 여정이 없습니다."),
 
+    NO_LOCATION_NAME("위치 이름을 검색하지 못했습니다."),
+
     EMPTY_ITINERARY("해당 여정id는 이미 삭제되었거나 존재하지 않습니다."),
 
     INVALID_ITINERARY_TIME_RANGE("여정 시간 범위는 여행 시간 범위를 넘어갈 수 없습니다."),

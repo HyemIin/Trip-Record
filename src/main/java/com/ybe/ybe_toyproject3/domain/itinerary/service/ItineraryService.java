@@ -6,6 +6,7 @@ import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryCreateResp
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.InvalidItineraryScheduleException;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.ItineraryNotFoundException;
+import com.ybe.ybe_toyproject3.domain.itinerary.exception.LocationNameNotFoundException;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 import com.ybe.ybe_toyproject3.domain.location.model.Location;
@@ -59,7 +60,7 @@ public class ItineraryService {
         String locationName = kakaoApiComponent.getLocationNameByPlaceName(placeName);
 
         if (locationName == null) {
-            throw new RuntimeException("위치 이름을 검색하지 못했습니다.");
+            throw new LocationNameNotFoundException(NO_LOCATION_NAME.getMessage());
         }
 
         return locationName;
