@@ -25,7 +25,6 @@ public class ItineraryResponse {
     private String placeName;
     private LocalDateTime placeArriveTime;
     private LocalDateTime placeDepartTime;
-    private String locationName;
     private LocationResponse location;
 
     public static ItineraryResponse fromEntity(Itinerary itinerary) {
