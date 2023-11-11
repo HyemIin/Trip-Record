@@ -28,4 +28,8 @@ public class Location {
     public void setItinerary(Itinerary itinerary) {
         this.itinerary = itinerary;
     }
+
+    public void updateLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 }
