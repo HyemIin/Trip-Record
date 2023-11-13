@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 
@@ -43,43 +42,46 @@ public class TripService {
     }
 
     @Transactional
-    public List<TripListResponse> findAllTrips() {
+    public List<TripListResponse> findAllTrips(String searchCondition) {
+        //query string이 Null이 아니면 검색조건으로 검색
+        if (searchCondition != null) {
+            List<Trip> tripListBySearchCondition = tripRepository.findAllByTripNameContaining(searchCondition);
+            return toTripListResponseList(tripListBySearchCondition);
+        }
+        //query string이 Null이면 findAll
         List<Trip> tripList = tripRepository.findAll();
+        return toTripListResponseList(tripList);
 
-        if (tripList.isEmpty()) {
-            throw new TripNotFoundException(NO_TRIP.getMessage());
-        }
-
-        List<TripListResponse> tripListResponse = new ArrayList<>();
-        for (Trip trip : tripList) {
-            List<String> itineraryNames = trip.getItineraryList()
-                    .stream()
-                    .map(Itinerary::getItineraryName)
-                    .collect(Collectors.toList());
-
-            TripListResponse tripResponse = TripListResponse.builder()
-                    .id(trip.getId())
-                    .tripName(trip.getTripName())
-                    .tripStartDate(trip.getTripStartDate())
-                    .tripEndDate(trip.getTripEndDate())
-                    .tripType(trip.getTripType())
-                    .itineraryNames(itineraryNames)
-                    .build();
-
-            tripListResponse.add(tripResponse);
-        }
-
-        return tripListResponse;
     }
 
     @Transactional
     public TripResponse getTripById(Long tripId) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(
-                () -> new TripNotFoundException(NO_TRIP.getMessage())
-        );
+                        () -> new TripNotFoundException(NO_TRIP.getMessage())
+                );
 
         return TripResponse.fromEntity(trip);
+    }
+
+    private List<TripListResponse> toTripListResponseList(List<Trip> tripList) {
+        if (tripList.isEmpty()) {
+            throw new TripNotFoundException(NO_TRIP.getMessage());
+        }
+
+        List<TripListResponse> tripListResponse = new ArrayList<>();
+        for (Trip trip : tripList) {
+            TripListResponse tripResponse = TripListResponse.builder()
+                    .id(trip.getId())
+                    .tripName(trip.getTripName())
+                    .tripStartDate(trip.getTripStartDate())
+                    .tripEndDate(trip.getTripEndDate())
+                    .tripType(trip.getTripType())
+                    .build();
+
+            tripListResponse.add(tripResponse);
+        }
+        return tripListResponse;
     }
 
     @Transactional
@@ -99,7 +101,7 @@ public class TripService {
     public String deleteTrip(Long id) {
         Trip trip = validateTripEmpty(id);
         tripRepository.deleteById(id);
-        return id+"번 여행이 삭제되었습니다.";
+        return id + "번 여행이 삭제되었습니다.";
     }
 
     private void validateTripUpdateRequest(Long tripId, TripUpdateRequest tripUpdateRequest) {
