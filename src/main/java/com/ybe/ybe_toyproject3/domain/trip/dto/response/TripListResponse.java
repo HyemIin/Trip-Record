@@ -24,7 +24,7 @@ public class TripListResponse {
     private LocalDateTime tripEndDate;
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
-    @ArraySchema(schema = @Schema(description = "조회된 여정 이름 목록"))
-    private List<String> itineraryNames;
+    //@ArraySchema(schema = @Schema(description = "조회된 여정 이름 목록"))
+    //private List<String> itineraryNames;
 }
 
