@@ -5,6 +5,7 @@ import com.ybe.ybe_toyproject3.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
@@ -15,7 +16,6 @@ public class Likes {
     @Column(name = "likes_id")
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
@@ -24,4 +24,8 @@ public class Likes {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Likes(Trip trip, User user) {
+        this.trip = trip;
+        this.user = user;
+    }
 }
