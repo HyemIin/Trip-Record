@@ -14,7 +14,6 @@ import com.ybe.ybe_toyproject3.domain.trip.exception.NullTripListException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
-import com.ybe.ybe_toyproject3.domain.user.dto.response.UserInfo;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
+import static com.ybe.ybe_toyproject3.global.common.ErrorCode.DUPLICATE_TRIP_NAME;
+import static com.ybe.ybe_toyproject3.global.common.ErrorCode.NO_TRIP;
 
 @Service
 @RequiredArgsConstructor
@@ -131,9 +130,7 @@ public class TripService {
     }
 
     public Integer getNumberOfItinerary(Long tripId) {
-        List<Itinerary> itinerary = itineraryRepository.findItinerariesByTripId(tripId).orElseThrow(
-                () -> new TripNotFoundException(NO_ITINERARY.getMessage())
-        );
+        List<Itinerary> itinerary = itineraryRepository.findItinerariesByTripId(tripId);
         return itinerary.size();
     }
 

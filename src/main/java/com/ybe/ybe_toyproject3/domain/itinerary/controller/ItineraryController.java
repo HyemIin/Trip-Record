@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.itinerary.controller;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryCreateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryCreateResponse;
+import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.service.ItineraryService;
 import com.ybe.ybe_toyproject3.global.common.annotation.FailApiResponses;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "여정 API", description = "여정 관련 API 모음입니다.")
 @Slf4j
@@ -61,6 +64,18 @@ public class ItineraryController {
         String deletedItineraryId = itineraryService.deleteItinerary(itineraryId, tripId);
         return ResponseEntity.ok(
                 deletedItineraryId
+        );
+    }
+    @Operation(summary = "여정 조회 API", description = "여정 조회 API 입니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = Long.class)))
+    @GetMapping("trips/{tripId}/itineraries")
+    public ResponseEntity<List<ItineraryResponse>> getItinerary(
+            @PathVariable Long tripId,
+            @RequestParam(name = "search-condition", required = false) String searchCondition
+
+        ) {
+        return ResponseEntity.ok(
+                itineraryService.getItinerary(tripId, searchCondition)
         );
     }
 }

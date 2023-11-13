@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.itinerary.service;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryCreateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryCreateResponse;
+import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.InvalidItineraryScheduleException;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.ItineraryNotFoundException;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 
@@ -61,7 +64,7 @@ public class ItineraryService {
 
         itineraryRepository.delete(itinerary);
 
-        return itineraryId+"번 여정이 삭제되었습니다.";
+        return itineraryId + "번 여정이 삭제되었습니다.";
     }
 
     private Trip validateTrip(Long tripId) {
@@ -72,7 +75,7 @@ public class ItineraryService {
     }
 
     private Itinerary validateItinerary(Long itineraryId, Long TripId) {
-        if (!tripRepository.existsById(TripId)){
+        if (!tripRepository.existsById(TripId)) {
             throw new TripNotFoundException();
         }
         return itineraryRepository.findById(itineraryId)
@@ -125,5 +128,21 @@ public class ItineraryService {
         if (request.getPlaceArriveTime().isAfter(trip.getTripEndDate())) {
             throw new InvalidItineraryScheduleException(INVALID_ITINERARY_TIME_RANGE.getMessage());
         }
+    }
+
+    public List<ItineraryResponse> getItinerary(Long tripId, String searchCondition) {
+        validateTrip(tripId);
+        if (searchCondition != null) {
+            return toItinerarayResponseList(itineraryRepository.findItinerariesByPlaceNameContaining(searchCondition));
+        }
+        return toItinerarayResponseList(itineraryRepository.findItinerariesByTripId(tripId));
+    }
+
+    private List<ItineraryResponse> toItinerarayResponseList(List<Itinerary> itineraries) {
+        List<ItineraryResponse> itineraryResponseList = new ArrayList<>();
+        for (var it : itineraries) {
+            itineraryResponseList.add(ItineraryResponse.fromEntity(it));
+        }
+        return itineraryResponseList;
     }
 }
