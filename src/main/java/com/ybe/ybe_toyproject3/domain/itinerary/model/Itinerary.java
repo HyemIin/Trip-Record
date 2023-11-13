@@ -1,5 +1,6 @@
 package com.ybe.ybe_toyproject3.domain.itinerary.model;
 
+import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.location.model.Location;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import jakarta.persistence.*;
@@ -55,8 +56,25 @@ public class Itinerary {
         this.location = location;
     }
 
+    public void update(ItineraryUpdateRequest itineraryUpdateRequest) {
+
+        this.itineraryName = itineraryUpdateRequest.getItineraryName();
+        this.transportation = itineraryUpdateRequest.getTransportation();
+        this.departCity = itineraryUpdateRequest.getDepartCity();
+        this.arriveCity = itineraryUpdateRequest.getArriveCity();
+        this.cityDepartTime = itineraryUpdateRequest.getCityDepartTime();
+        this.cityArriveTime = itineraryUpdateRequest.getCityArriveTime();
+        this.accommodation = itineraryUpdateRequest.getAccommodation();
+        this.checkInTime = itineraryUpdateRequest.getCheckInTime();
+        this.checkOutTime = itineraryUpdateRequest.getCheckOutTime();
+        this.placeName = itineraryUpdateRequest.getPlaceName();
+        this.placeDepartTime = itineraryUpdateRequest.getPlaceDepartTime();
+        this.placeArriveTime = itineraryUpdateRequest.getPlaceArriveTime();
+    }
+
     public void add(Trip trip) {
         this.trip = trip;
     }
+
 
 }
