@@ -70,8 +70,13 @@ public class ItineraryService {
     public ItineraryUpdateResponse editItinerary(
             Long itineraryId, ItineraryUpdateRequest request
     ) {
+        String locationName = createLocation(request.getPlaceName());
+
         Itinerary itinerary = validateItinerary(itineraryId);
         validateItineraryUpdateRequest(request);
+
+        Location location = itinerary.getLocation();
+        location.updateLocationName(locationName);
 
         itinerary.update(request);
 
