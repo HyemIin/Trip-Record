@@ -52,23 +52,9 @@ public class TripService {
 
         List<TripListResponse> tripListResponse = new ArrayList<>();
         for (Trip trip : tripList) {
-            List<String> itineraryNames = trip.getItineraryList()
-                    .stream()
-                    .map(Itinerary::getItineraryName)
-                    .collect(Collectors.toList());
-
-            TripListResponse tripResponse = TripListResponse.builder()
-                    .id(trip.getId())
-                    .tripName(trip.getTripName())
-                    .tripStartDate(trip.getTripStartDate())
-                    .tripEndDate(trip.getTripEndDate())
-                    .tripType(trip.getTripType())
-                    .itineraryNames(itineraryNames)
-                    .build();
-
+            TripListResponse tripResponse = TripListResponse.fromEntity(trip);
             tripListResponse.add(tripResponse);
         }
-
         return tripListResponse;
     }
 
