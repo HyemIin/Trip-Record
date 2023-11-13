@@ -2,10 +2,7 @@ package com.ybe.ybe_toyproject3.domain.trip.controller;
 
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripUpdateResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.*;
 import com.ybe.ybe_toyproject3.domain.trip.service.TripService;
 import com.ybe.ybe_toyproject3.global.common.annotation.FailApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +50,7 @@ public class TripController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripResponse.class)))
     @FailApiResponses
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripResponse> getTripById(
+    public ResponseEntity<TripDetailResponse> getTripById(
             @PathVariable Long tripId
     ) {
         return ResponseEntity.ok(

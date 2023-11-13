@@ -4,10 +4,7 @@ import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripUpdateResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.*;
 import com.ybe.ybe_toyproject3.domain.trip.exception.DuplicateTripNameException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.InvalidTripScheduleException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.NullTripListException;
@@ -55,13 +52,13 @@ public class TripService {
     }
 
     @Transactional
-    public TripResponse getTripById(Long tripId) {
+    public TripDetailResponse getTripById(Long tripId) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(
                         () -> new TripNotFoundException(NO_TRIP.getMessage())
                 );
 
-        return TripResponse.fromEntity(trip);
+        return TripDetailResponse.fromEntity(trip);
     }
 
     private List<TripListResponse> toTripListResponseList(List<Trip> tripList) {
