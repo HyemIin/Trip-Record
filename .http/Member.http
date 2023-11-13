@@ -3,7 +3,7 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
-  "email": "testuser@email.com",
+  "email": "testuser4@email.com",
   "name": "testuser",
   "password": "12341234"
 }
@@ -14,7 +14,7 @@ Content-Type: application/json
 Authorization: {{auth_token}}
 
 {
-  "email": "testuser@email.com",
+  "email": "testuser4@email.com",
   "password": "12341234"
 }
 
@@ -36,4 +36,9 @@ Authorization: {{auth_token}}
 
 ### 로그아웃
 POST http://localhost:8080/auth/logout
+Authorization: {{auth_token}}
+
+
+### 사용자 삭제
+DELETE http://localhost:8080/user
 Authorization: {{auth_token}}

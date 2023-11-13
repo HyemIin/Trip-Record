@@ -1,5 +1,6 @@
 package com.ybe.ybe_toyproject3.domain.user.service;
 
+import com.ybe.ybe_toyproject3.domain.user.dto.response.DeleteUserResponse;
 import com.ybe.ybe_toyproject3.domain.user.dto.response.UserInfo;
 import com.ybe.ybe_toyproject3.domain.user.exception.UserNotFoundException;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
@@ -16,12 +17,22 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserInfo getUserInfo() {
-        Long currentMemberId = SecurityUtil.getCurrentUserId();
-        User user = userRepository.findById(currentMemberId).orElseThrow(UserNotFoundException::new);
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.findById(currentUserId).orElseThrow(UserNotFoundException::new);
         return UserInfo.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .build();
+    }
+
+    @Transactional
+    public DeleteUserResponse deleteUser() {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        if (!userRepository.existsById(currentUserId)) {
+            throw new IllegalArgumentException("이미 삭제된 유저 입니다.");
+        }
+        userRepository.deleteById(currentUserId);
+        return new DeleteUserResponse(currentUserId);
     }
 }

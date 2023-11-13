@@ -11,9 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @Tag(name = "사용자 API", description = "사용자 관련 API 모음입니다.")
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +29,12 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<?> getUserInfo() {
         return ResponseEntity.ok(userService.getUserInfo());
+    }
+
+    @Operation(summary = "사용자 탈퇴 API", description = "사용자 탈퇴 API 입니다.")
+    @FailApiResponses
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteUser() {
+        return ResponseEntity.ok(userService.deleteUser());
     }
 }
