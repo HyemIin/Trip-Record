@@ -3,7 +3,9 @@ package com.ybe.ybe_toyproject3.domain.itinerary.model;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.location.model.Location;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
+
 import jakarta.persistence.*;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,12 +33,11 @@ public class Itinerary {
     private LocalDateTime placeArriveTime;
     private LocalDateTime placeDepartTime;
 
-    // @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip trip;
 
-    @OneToOne(mappedBy = "itinerary", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "itinerary")
     private Location location;
 
     @Builder
@@ -56,25 +57,26 @@ public class Itinerary {
         this.location = location;
     }
 
-    public void update(ItineraryUpdateRequest itineraryUpdateRequest) {
-
-        this.itineraryName = itineraryUpdateRequest.getItineraryName();
-        this.transportation = itineraryUpdateRequest.getTransportation();
-        this.departCity = itineraryUpdateRequest.getDepartCity();
-        this.arriveCity = itineraryUpdateRequest.getArriveCity();
-        this.cityDepartTime = itineraryUpdateRequest.getCityDepartTime();
-        this.cityArriveTime = itineraryUpdateRequest.getCityArriveTime();
-        this.accommodation = itineraryUpdateRequest.getAccommodation();
-        this.checkInTime = itineraryUpdateRequest.getCheckInTime();
-        this.checkOutTime = itineraryUpdateRequest.getCheckOutTime();
-        this.placeName = itineraryUpdateRequest.getPlaceName();
-        this.placeDepartTime = itineraryUpdateRequest.getPlaceDepartTime();
-        this.placeArriveTime = itineraryUpdateRequest.getPlaceArriveTime();
-    }
-
     public void add(Trip trip) {
         this.trip = trip;
     }
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
+    public void update(ItineraryUpdateRequest request) {
+        this.itineraryName = request.getItineraryName();
+        this.transportation = request.getTransportation();
+        this.departCity = request.getDepartCity();
+        this.arriveCity = request.getArriveCity();
+        this.cityDepartTime = request.getCityDepartTime();
+        this.cityArriveTime = request.getCityArriveTime();
+        this.accommodation = request.getAccommodation();
+        this.checkInTime = request.getCheckInTime();
+        this.checkOutTime = request.getCheckOutTime();
+        this.placeName = request.getPlaceName();
+        this.placeArriveTime = request.getPlaceArriveTime();
+        this.placeDepartTime = request.getPlaceDepartTime();
+    }
 }

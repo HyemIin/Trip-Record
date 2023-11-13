@@ -1,13 +1,13 @@
 package com.ybe.ybe_toyproject3.domain.itinerary.dto.response;
 
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
+import com.ybe.ybe_toyproject3.domain.location.dto.LocationResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,6 +36,8 @@ public class ItineraryUpdateResponse {
     private LocalDateTime placeArriveTime;
     @Schema(description = "장소 출발 일시", defaultValue = "2023-10-25T14:00:00")
     private LocalDateTime placeDepartTime;
+    @Schema(description = "위치명", defaultValue = "수정된 위치명")
+    private LocationResponse location;
 
     public static ItineraryUpdateResponse fromEntity(Itinerary itinerary) {
         return ItineraryUpdateResponse.builder()
@@ -51,6 +53,7 @@ public class ItineraryUpdateResponse {
                 .placeName(itinerary.getPlaceName())
                 .placeDepartTime(itinerary.getPlaceDepartTime())
                 .placeArriveTime(itinerary.getPlaceArriveTime())
+                .location(LocationResponse.fromEntity(itinerary.getLocation()))
                 .build();
     }
 }

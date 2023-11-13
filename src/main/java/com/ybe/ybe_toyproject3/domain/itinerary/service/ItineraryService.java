@@ -7,12 +7,18 @@ import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.InvalidItineraryScheduleException;
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.ItineraryNotFoundException;
+import com.ybe.ybe_toyproject3.domain.itinerary.exception.LocationNameNotFoundException;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
+import com.ybe.ybe_toyproject3.domain.location.model.Location;
+import com.ybe.ybe_toyproject3.domain.location.repository.LocationRepository;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
+import com.ybe.ybe_toyproject3.global.component.KakaoApiComponent;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +33,14 @@ import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 public class ItineraryService {
     private final ItineraryRepository itineraryRepository;
     private final TripRepository tripRepository;
+    private final LocationRepository locationRepository;
+
+    private final KakaoApiComponent kakaoApiComponent;
 
     @Transactional
-    public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest) {
+    public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest)  {
+        String locationName = createLocation(itineraryCreateRequest.getPlaceName());
+        Location location = new Location(locationName);
 
         Trip trip = validateTrip(tripId);
 
@@ -38,18 +49,37 @@ public class ItineraryService {
 
         Itinerary itinerary = itineraryCreateRequest.toEntity();
         itinerary.add(trip);
+        itinerary.setLocation(location);
+
+        location.setItinerary(itinerary);
+        locationRepository.save(location);
 
         Itinerary savedItinerary = itineraryRepository.save(itinerary);
 
         return ItineraryCreateResponse.fromEntity(savedItinerary);
     }
 
+    public String createLocation(String placeName) {
+        String locationName = kakaoApiComponent.getLocationNameByPlaceName(placeName);
+
+        if (locationName == null) {
+            throw new LocationNameNotFoundException(NO_LOCATION_NAME.getMessage());
+        }
+
+        return locationName;
+    }
+
     @Transactional
     public ItineraryUpdateResponse editItinerary(
-            Long itineraryId, ItineraryUpdateRequest request, Long tripId
+            Long itineraryId, ItineraryUpdateRequest request
     ) {
-        Itinerary itinerary = validateItinerary(itineraryId, tripId);
+        String locationName = createLocation(request.getPlaceName());
+
+        Itinerary itinerary = validateItinerary(itineraryId);
         validateItineraryUpdateRequest(request);
+
+        Location location = itinerary.getLocation();
+        location.updateLocationName(locationName);
 
         itinerary.update(request);
 
@@ -57,14 +87,14 @@ public class ItineraryService {
     }
 
     @Transactional
-    public String deleteItinerary(Long itineraryId, Long tripId) {
-        validateItinerary(itineraryId, tripId);
+    public String deleteItinerary(Long itineraryId) {
+        validateItinerary(itineraryId);
 
         Itinerary itinerary = itineraryRepository.findById(itineraryId).get();
 
         itineraryRepository.delete(itinerary);
 
-        return itineraryId + "번 여정이 삭제되었습니다.";
+        return itineraryId+"번 여정이 삭제되었습니다.";
     }
 
     private Trip validateTrip(Long tripId) {
@@ -74,10 +104,7 @@ public class ItineraryService {
                 );
     }
 
-    private Itinerary validateItinerary(Long itineraryId, Long TripId) {
-        if (!tripRepository.existsById(TripId)) {
-            throw new TripNotFoundException();
-        }
+    private Itinerary validateItinerary(Long itineraryId) {
         return itineraryRepository.findById(itineraryId)
                 .orElseThrow(
                         () -> new ItineraryNotFoundException(EMPTY_ITINERARY.getMessage())
