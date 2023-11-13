@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/trip")
+@RequestMapping("/trips")
 public class TripController {
     private final TripService tripService;
 
@@ -41,9 +41,11 @@ public class TripController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripListResponse.class)))
     @FailApiResponses
     @GetMapping("")
-    public ResponseEntity<List<TripListResponse>> findAllTrips() {
+    public ResponseEntity<List<TripListResponse>> findAllTrips(
+            @RequestParam(value = "search-condition", required = false) String searchCondition
+    ) {
         return ResponseEntity.ok(
-                tripService.findAllTrips()
+                tripService.findAllTrips(searchCondition)
         );
     }
 
@@ -51,7 +53,9 @@ public class TripController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripResponse.class)))
     @FailApiResponses
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripResponse> getTripById(@PathVariable Long tripId) {
+    public ResponseEntity<TripResponse> getTripById(
+            @PathVariable Long tripId
+    ) {
         return ResponseEntity.ok(
                 tripService.getTripById(tripId)
         );
