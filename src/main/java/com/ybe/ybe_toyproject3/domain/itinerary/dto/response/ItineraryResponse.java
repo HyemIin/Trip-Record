@@ -1,12 +1,13 @@
 package com.ybe.ybe_toyproject3.domain.itinerary.dto.response;
 
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
+import com.ybe.ybe_toyproject3.domain.location.dto.LocationResponse;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,6 +25,7 @@ public class ItineraryResponse {
     private String placeName;
     private LocalDateTime placeArriveTime;
     private LocalDateTime placeDepartTime;
+    private LocationResponse location;
 
     public static ItineraryResponse fromEntity(Itinerary itinerary) {
         return ItineraryResponse.builder()
@@ -40,6 +42,7 @@ public class ItineraryResponse {
                 .placeName(itinerary.getPlaceName())
                 .placeDepartTime(itinerary.getPlaceDepartTime())
                 .placeArriveTime(itinerary.getPlaceArriveTime())
+                .location(LocationResponse.fromEntity(itinerary.getLocation()))
                 .build();
     }
 }

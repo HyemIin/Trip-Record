@@ -8,10 +8,15 @@ import com.ybe.ybe_toyproject3.domain.itinerary.exception.InvalidItinerarySchedu
 import com.ybe.ybe_toyproject3.domain.itinerary.exception.ItineraryNotFoundException;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
+import com.ybe.ybe_toyproject3.domain.location.model.Location;
+import com.ybe.ybe_toyproject3.domain.location.repository.LocationRepository;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
+import com.ybe.ybe_toyproject3.global.component.KakaoApiComponent;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +29,14 @@ import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 public class ItineraryService {
     private final ItineraryRepository itineraryRepository;
     private final TripRepository tripRepository;
+    private final LocationRepository locationRepository;
+
+    private final KakaoApiComponent kakaoApiComponent;
 
     @Transactional
-    public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest) {
+    public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest)  {
+        String locationName = createLocation(itineraryCreateRequest.getPlaceName());
+        Location location = new Location(locationName);
 
         Trip trip = validateTrip(tripId);
 
@@ -35,10 +45,24 @@ public class ItineraryService {
 
         Itinerary itinerary = itineraryCreateRequest.toEntity();
         itinerary.add(trip);
+        itinerary.setLocation(location);
+
+        location.setItinerary(itinerary);
+        locationRepository.save(location);
 
         Itinerary savedItinerary = itineraryRepository.save(itinerary);
 
         return ItineraryCreateResponse.fromEntity(savedItinerary);
+    }
+
+    public String createLocation(String placeName) {
+        String locationName = kakaoApiComponent.getLocationNameByPlaceName(placeName);
+
+        if (locationName == null) {
+            throw new RuntimeException("위치 이름을 검색하지 못했습니다.");
+        }
+
+        return locationName;
     }
 
     @Transactional
@@ -48,18 +72,7 @@ public class ItineraryService {
         Itinerary itinerary = validateItinerary(itineraryId);
         validateItineraryUpdateRequest(request);
 
-//        itinerary.setItineraryName(request.getItineraryName());
-//        itinerary.setTransportation(request.getTransportation());
-//        itinerary.setDepartCity(request.getDepartCity());
-//        itinerary.setArriveCity(request.getArriveCity());
-//        itinerary.setCityDepartTime(request.getCityDepartTime());
-//        itinerary.setCityArriveTime(request.getCityArriveTime());
-//        itinerary.setAccommodation(request.getAccommodation());
-//        itinerary.setCheckInTime(request.getCheckInTime());
-//        itinerary.setCheckOutTime(request.getCheckOutTime());
-//        itinerary.setPlaceName(request.getPlaceName());
-//        itinerary.setPlaceDepartTime(request.getPlaceDepartTime());
-//        itinerary.setPlaceArriveTime(request.getPlaceArriveTime());
+        itinerary.update(request);
 
         return ItineraryUpdateResponse.fromEntity(itinerary);
     }
