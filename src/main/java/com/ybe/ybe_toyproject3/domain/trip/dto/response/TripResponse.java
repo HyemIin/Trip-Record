@@ -1,21 +1,18 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.response;
 
-import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class TripResponse {
     @Schema(description = "여행 ID", defaultValue = "1")
     private Long id;
@@ -28,15 +25,15 @@ public class TripResponse {
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
 
-    @ArraySchema(schema = @Schema(implementation = ItineraryResponse.class))
-    @Schema(description = "조회된 여행에 포함된 여정 목록")
-    private List<ItineraryResponse> itineraryList;
+    //@ArraySchema(schema = @Schema(implementation = ItineraryResponse.class))
+    //@Schema(description = "조회된 여행에 포함된 여정 목록")
+    //private List<ItineraryResponse> itineraryList;
 
     public static TripResponse fromEntity(Trip trip) {
-        List<ItineraryResponse> itineraryResponse = trip.getItineraryList()
-                .stream()
-                .map(ItineraryResponse::fromEntity)
-                .collect(Collectors.toList());
+//        List<ItineraryResponse> itineraryResponse = trip.getItineraryList()
+//                .stream()
+//                .map(ItineraryResponse::fromEntity)
+//                .collect(Collectors.toList());
 
         return TripResponse.builder()
                 .id(trip.getId())
@@ -44,7 +41,7 @@ public class TripResponse {
                 .tripStartDate(trip.getTripStartDate())
                 .tripEndDate(trip.getTripEndDate())
                 .tripType(trip.getTripType())
-                .itineraryList(itineraryResponse)
+//                .itineraryList(itineraryResponse)
                 .build();
     }
 }
