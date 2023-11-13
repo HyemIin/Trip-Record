@@ -57,4 +57,9 @@ public class Trip {
         this.tripEndDate = request.getTripEndDate();
         this.tripType = request.getTripType();
     }
+
+    public void addUser(User user){
+        this.user = user;
+        user.getTripList().add(this);
+    }
 }

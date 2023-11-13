@@ -4,20 +4,29 @@ import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.*;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripDetailResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.trip.exception.DuplicateTripNameException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.InvalidTripScheduleException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.NullTripListException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
+import com.ybe.ybe_toyproject3.domain.user.dto.response.UserInfo;
+import com.ybe.ybe_toyproject3.domain.user.model.User;
+import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 
@@ -27,6 +36,7 @@ import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 public class TripService {
     private final TripRepository tripRepository;
     private final ItineraryRepository itineraryRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public TripCreateResponse createTrip(TripCreateRequest tripCreateRequest) {
@@ -34,7 +44,14 @@ public class TripService {
             throw new InvalidTripScheduleException();
         }
         Trip trip = tripCreateRequest.toEntity();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+        User user = userRepository.findById(Long.parseLong(userDetails.getUsername())).orElseThrow(
+                () -> new RuntimeException("USER INFO NOT FOUND")
+        );
+        trip.addUser(user);
         tripRepository.save(trip);
+
         return TripCreateResponse.getTripCreateResponse(trip);
     }
 
