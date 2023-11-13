@@ -1,5 +1,7 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.response;
 
+import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
+import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,7 +27,27 @@ public class TripListResponse {
     private LocalDateTime tripEndDate;
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
+    @Schema(description = "좋아요 갯수", defaultValue = "0")
+    private Integer likesCount;
     @ArraySchema(schema = @Schema(description = "조회된 여정 이름 목록"))
     private List<String> itineraryNames;
+
+    public static TripListResponse fromEntity(Trip trip) {
+        List<String> itineraryNames = trip.getItineraryList()
+                .stream()
+                .map(Itinerary::getItineraryName)
+                .collect(Collectors.toList());
+
+        return TripListResponse.builder()
+                .id(trip.getId())
+                .tripName(trip.getTripName())
+                .tripStartDate(trip.getTripStartDate())
+                .tripEndDate(trip.getTripEndDate())
+                .tripType(trip.getTripType())
+                .likesCount(trip.getLikesList().size())
+                .itineraryNames(itineraryNames)
+                .build();
+    }
+
 }
 

@@ -27,6 +27,8 @@ public class TripResponse {
     private LocalDateTime tripEndDate;
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
+    @Schema(description = "좋아요 갯수", defaultValue = "0")
+    private Integer likesCount;
 
     @ArraySchema(schema = @Schema(implementation = ItineraryResponse.class))
     @Schema(description = "조회된 여행에 포함된 여정 목록")
@@ -44,6 +46,7 @@ public class TripResponse {
                 .tripStartDate(trip.getTripStartDate())
                 .tripEndDate(trip.getTripEndDate())
                 .tripType(trip.getTripType())
+                .likesCount(trip.getLikesList().size())
                 .itineraryList(itineraryResponse)
                 .build();
     }
