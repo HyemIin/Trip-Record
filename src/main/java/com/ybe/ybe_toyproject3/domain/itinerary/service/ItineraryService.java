@@ -43,30 +43,19 @@ public class ItineraryService {
 
     @Transactional
     public ItineraryUpdateResponse editItinerary(
-            Long itineraryId, ItineraryUpdateRequest request
+            Long itineraryId, ItineraryUpdateRequest request, Long tripId
     ) {
-        Itinerary itinerary = validateItinerary(itineraryId);
+        Itinerary itinerary = validateItinerary(itineraryId, tripId);
         validateItineraryUpdateRequest(request);
 
-//        itinerary.setItineraryName(request.getItineraryName());
-//        itinerary.setTransportation(request.getTransportation());
-//        itinerary.setDepartCity(request.getDepartCity());
-//        itinerary.setArriveCity(request.getArriveCity());
-//        itinerary.setCityDepartTime(request.getCityDepartTime());
-//        itinerary.setCityArriveTime(request.getCityArriveTime());
-//        itinerary.setAccommodation(request.getAccommodation());
-//        itinerary.setCheckInTime(request.getCheckInTime());
-//        itinerary.setCheckOutTime(request.getCheckOutTime());
-//        itinerary.setPlaceName(request.getPlaceName());
-//        itinerary.setPlaceDepartTime(request.getPlaceDepartTime());
-//        itinerary.setPlaceArriveTime(request.getPlaceArriveTime());
+        itinerary.update(request);
 
         return ItineraryUpdateResponse.fromEntity(itinerary);
     }
 
     @Transactional
-    public String deleteItinerary(Long itineraryId) {
-        validateItinerary(itineraryId);
+    public String deleteItinerary(Long itineraryId, Long tripId) {
+        validateItinerary(itineraryId, tripId);
 
         Itinerary itinerary = itineraryRepository.findById(itineraryId).get();
 
@@ -82,7 +71,10 @@ public class ItineraryService {
                 );
     }
 
-    private Itinerary validateItinerary(Long itineraryId) {
+    private Itinerary validateItinerary(Long itineraryId, Long TripId) {
+        if (!tripRepository.existsById(TripId)){
+            throw new TripNotFoundException();
+        }
         return itineraryRepository.findById(itineraryId)
                 .orElseThrow(
                         () -> new ItineraryNotFoundException(EMPTY_ITINERARY.getMessage())
