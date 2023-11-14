@@ -23,7 +23,13 @@ public enum ErrorCode {
     INVALID_ACCOMMODATION_ARRIVAL("숙소의 체크인 일시는 도시의 도착 일시 이후여야 합니다"),
 
     INTERNAL_SERVER_ERROR("서버에 오류가 발생했습니다."),
-    INVALID_REQUEST("잘못된 요청입니다.");
+    INVALID_REQUEST("잘못된 요청입니다."),
+
+    NO_USER("해당 정보에 대한 유저가 없습니다."),
+
+    ALREADY_EXIST_LIKES("이미 좋아요를 눌렀습니다"),
+    NO_LIKES("해당 좋아요는 이미 취소되었거나 존재하지 않습니다"),
+    NO_TRIP_USER_LIKES("유저가 좋아요를 누른 여행이 없습니다");
 
     private final String message;
 }
