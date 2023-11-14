@@ -11,14 +11,14 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TripResponse {
+@ToString
+public class TripDetailResponse {
     @Schema(description = "여행 ID", defaultValue = "1")
     private Long id;
     @Schema(description = "여행 이름", defaultValue = "조회된 여행 이름")
@@ -29,36 +29,31 @@ public class TripResponse {
     private LocalDateTime tripEndDate;
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
-    @Schema(description = "좋아요 갯수", defaultValue = "0")
-    private Integer likesCount;
+
+    private List<CommentReadResponse> commentsList;
 
     @ArraySchema(schema = @Schema(implementation = ItineraryResponse.class))
     @Schema(description = "조회된 여행에 포함된 여정 목록")
     private List<ItineraryResponse> itineraryList;
 
-    @ArraySchema(schema = @Schema(implementation = CommentReadResponse.class))
-    private List<CommentReadResponse> commentList;
-
-    public static TripResponse fromEntity(Trip trip) {
+    public static TripDetailResponse fromEntity(Trip trip) {
         List<ItineraryResponse> itineraryResponse = trip.getItineraryList()
                 .stream()
                 .map(ItineraryResponse::fromEntity)
-                .collect(Collectors.toList());
-
+                .toList();
         List<CommentReadResponse> commentReadResponses = trip.getCommentList()
                 .stream()
                 .map(CommentReadResponse::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
 
-        return TripResponse.builder()
+        return TripDetailResponse.builder()
                 .id(trip.getId())
                 .tripName(trip.getTripName())
                 .tripStartDate(trip.getTripStartDate())
                 .tripEndDate(trip.getTripEndDate())
                 .tripType(trip.getTripType())
-                .likesCount(trip.getLikesList().size())
                 .itineraryList(itineraryResponse)
-                .commentList(commentReadResponses)
+                .commentsList(commentReadResponses)
                 .build();
     }
 }

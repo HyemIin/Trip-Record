@@ -2,10 +2,7 @@ package com.ybe.ybe_toyproject3.domain.trip.controller;
 
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripUpdateResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.*;
 import com.ybe.ybe_toyproject3.domain.trip.service.TripService;
 import com.ybe.ybe_toyproject3.global.common.annotation.FailApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/trip")
+@RequestMapping("/trips")
 public class TripController {
     private final TripService tripService;
 
@@ -41,9 +38,11 @@ public class TripController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripListResponse.class)))
     @FailApiResponses
     @GetMapping("")
-    public ResponseEntity<List<TripListResponse>> findAllTrips() {
+    public ResponseEntity<List<TripListResponse>> findAllTrips(
+            @RequestParam(value = "search-condition", required = false) String searchCondition
+    ) {
         return ResponseEntity.ok(
-                tripService.findAllTrips()
+                tripService.findAllTrips(searchCondition)
         );
     }
 
@@ -51,7 +50,9 @@ public class TripController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripResponse.class)))
     @FailApiResponses
     @GetMapping("/{tripId}")
-    public ResponseEntity<TripResponse> getTripById(@PathVariable Long tripId) {
+    public ResponseEntity<TripDetailResponse> getTripById(
+            @PathVariable Long tripId
+    ) {
         return ResponseEntity.ok(
                 tripService.getTripById(tripId)
         );
@@ -64,7 +65,7 @@ public class TripController {
     public ResponseEntity<TripUpdateResponse> editTrip(
             @PathVariable Long tripId,
             @Valid @RequestBody TripUpdateRequest tripUpdateRequest) {
-        System.out.println("REQUEST SUCCESS");
+        //System.out.println("REQUEST SUCCESS");
         return ResponseEntity.ok(tripService.editTripById(tripId, tripUpdateRequest));
     }
 

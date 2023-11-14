@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItineraryRepository extends JpaRepository<Itinerary, Long> {
-    Optional<List<Itinerary>> findItinerariesByTripId(Long tripId);
+    List<Itinerary> findItinerariesByTripId(Long tripId);
+
+    List<Itinerary> findItinerariesByPlaceNameContaining(String placeName);
     Optional<Itinerary> findById(Long itineraryId);
+
+
 }
