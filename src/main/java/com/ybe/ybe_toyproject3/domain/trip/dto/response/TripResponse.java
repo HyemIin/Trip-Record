@@ -1,7 +1,6 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.response;
 
 import com.ybe.ybe_toyproject3.domain.comment.dto.CommentReadResponse;
-import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;

@@ -61,7 +61,7 @@ public class ItineraryController {
     public ResponseEntity<String> deleteItinerary(
             @PathVariable Long itineraryId,
             @PathVariable Long tripId) {
-        String deletedItineraryId = itineraryService.deleteItinerary(itineraryId, tripId);
+        String deletedItineraryId = itineraryService.deleteItinerary(itineraryId);
         return ResponseEntity.ok(
                 deletedItineraryId
         );

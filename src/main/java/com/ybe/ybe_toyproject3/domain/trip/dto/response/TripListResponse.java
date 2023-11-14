@@ -40,6 +40,7 @@ public class TripListResponse {
                 .collect(Collectors.toList());
 
         return TripListResponse.builder()
+                .userId(trip.getUser().getId())
                 .id(trip.getId())
                 .tripName(trip.getTripName())
                 .tripStartDate(trip.getTripStartDate())
