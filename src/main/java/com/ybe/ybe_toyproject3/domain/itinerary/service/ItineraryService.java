@@ -50,7 +50,6 @@ public class ItineraryService {
         String locationName = createLocation(itineraryCreateRequest.getPlaceName());
         Location location = new Location(locationName);
 
-        Trip trip = validateTrip(tripId);
 
         validateItineraryTimeRange(itineraryCreateRequest, trip);
         validateItineraryCreateRequest(itineraryCreateRequest);
@@ -91,7 +90,6 @@ public class ItineraryService {
 
         String locationName = createLocation(request.getPlaceName());
 
-        Itinerary itinerary = validateItinerary(itineraryId);
         validateItineraryUpdateRequest(request);
 
         Location location = itinerary.getLocation();

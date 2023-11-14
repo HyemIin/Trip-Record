@@ -154,9 +154,7 @@ public class TripService {
     }
 
     public Integer getNumberOfItinerary(Long tripId) {
-        List<Itinerary> itinerary = itineraryRepository.findItinerariesByTripId(tripId).orElseThrow(
-                () -> new TripNotFoundException(NO_ITINERARY.getMessage())
-        );
+        List<Itinerary> itinerary = itineraryRepository.findItinerariesByTripId(tripId);
         return itinerary.size();
     }
 

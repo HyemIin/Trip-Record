@@ -14,7 +14,7 @@ Content-Type: application/json
 Authorization: {{auth_token}}
 
 {
-  "email": "testuser4@email.com",
+  "email": "testuser@email.com",
   "password": "12341234"
 }
 
@@ -25,7 +25,7 @@ Authorization: {{auth_token}}
 ### 로그인한 멤버 정보 조회
 GET http://localhost:8080/user
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjk5NjA1MDQ5LCJhdXRoIjoiUk9MRV9VU0VSIn0.Qy1PUvBgNSxz4UyjbE3_UZKm_SGDOkBEtWqsxuJVG_QfEDMLJumi22z7Qqfb8q30nC6O9ppwE97bTbYvN_mWVA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMCIsImV4cCI6MTY5OTkzMDM2OCwiYXV0aCI6IlJPTEVfVVNFUiJ9.zSh0b2ZKWy9VtvQoJ-PipvkgcwDJKk8lmvwP55B37AFGP0SoeKvaxHKPKJxv4PSNYvQjfjNAMNJ8-fxT4EElXA
 
 ### 엑세스 재발급
 POST http://localhost:8080/auth/refreshAccessToken
