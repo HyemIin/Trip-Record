@@ -5,6 +5,7 @@ import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class TripResponse {
+    @Schema(description = "사용자 ID", defaultValue = "1")
+    private Long userId;
     @Schema(description = "여행 ID", defaultValue = "1")
     private Long id;
     @Schema(description = "여행 이름", defaultValue = "조회된 여행 이름")
@@ -51,6 +54,7 @@ public class TripResponse {
                 .collect(Collectors.toList());
 
         return TripResponse.builder()
+                .userId(trip.getUser().getId())
                 .id(trip.getId())
                 .tripName(trip.getTripName())
                 .tripStartDate(trip.getTripStartDate())

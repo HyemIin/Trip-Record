@@ -60,6 +60,5 @@ public class Trip {
 
     public void addUser(User user){
         this.user = user;
-        user.getTripList().add(this);
     }
 }

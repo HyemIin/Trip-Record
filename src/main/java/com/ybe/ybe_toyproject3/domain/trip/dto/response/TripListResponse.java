@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 public class TripListResponse {
+    @Schema(description = "사용자 ID", defaultValue = "1")
+    private Long userId;
     @Schema(description = "여행 ID", defaultValue = "1")
     private Long id;
     @Schema(description = "여행 이름", defaultValue = "조회된 여행 이름")
