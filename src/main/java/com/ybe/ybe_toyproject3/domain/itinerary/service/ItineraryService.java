@@ -16,6 +16,7 @@ import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.global.component.KakaoApiComponent;
 
+import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -36,10 +37,15 @@ public class ItineraryService {
 
     @Transactional
     public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest)  {
+        Trip trip = validateTrip(tripId);
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long tripUserId = trip.getUser().getId();
+
+        checkItineraryAuthorization(currentUserId, tripUserId);
+
         String locationName = createLocation(itineraryCreateRequest.getPlaceName());
         Location location = new Location(locationName);
-
-        Trip trip = validateTrip(tripId);
 
         validateItineraryTimeRange(itineraryCreateRequest, trip);
         validateItineraryCreateRequest(itineraryCreateRequest);
@@ -70,9 +76,15 @@ public class ItineraryService {
     public ItineraryUpdateResponse editItinerary(
             Long itineraryId, ItineraryUpdateRequest request
     ) {
+        Itinerary itinerary = validateItinerary(itineraryId);
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long tripUserId = itinerary.getTrip().getUser().getId();
+
+        checkItineraryAuthorization(currentUserId, tripUserId);
+
         String locationName = createLocation(request.getPlaceName());
 
-        Itinerary itinerary = validateItinerary(itineraryId);
         validateItineraryUpdateRequest(request);
 
         Location location = itinerary.getLocation();
@@ -85,13 +97,22 @@ public class ItineraryService {
 
     @Transactional
     public String deleteItinerary(Long itineraryId) {
-        validateItinerary(itineraryId);
+        Itinerary itinerary = validateItinerary(itineraryId);
 
-        Itinerary itinerary = itineraryRepository.findById(itineraryId).get();
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long tripUserId = itinerary.getTrip().getUser().getId();
+
+        checkItineraryAuthorization(currentUserId, tripUserId);
 
         itineraryRepository.delete(itinerary);
 
         return itineraryId+"번 여정이 삭제되었습니다.";
+    }
+
+    private void checkItineraryAuthorization(Long currentUserId, Long tripUserId) {
+        if (!currentUserId.equals(tripUserId)) {
+            throw new RuntimeException("해당 여행에 대한 여정을 조작할 수 있는 권한이 없습니다.");
+        }
     }
 
     private Trip validateTrip(Long tripId) {

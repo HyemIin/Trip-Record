@@ -14,6 +14,9 @@ import com.ybe.ybe_toyproject3.domain.trip.exception.NullTripListException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
+import com.ybe.ybe_toyproject3.domain.user.model.User;
+import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 public class TripService {
     private final TripRepository tripRepository;
     private final ItineraryRepository itineraryRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public TripCreateResponse createTrip(TripCreateRequest tripCreateRequest) {
@@ -38,6 +42,11 @@ public class TripService {
             throw new InvalidTripScheduleException();
         }
         Trip trip = tripCreateRequest.toEntity();
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        User user = userRepository.getUserById(currentUserId);
+        trip.setUser(user);
+
         tripRepository.save(trip);
         return TripCreateResponse.getTripCreateResponse(trip);
     }
@@ -58,6 +67,7 @@ public class TripService {
                     .collect(Collectors.toList());
 
             TripListResponse tripResponse = TripListResponse.builder()
+                    .userId(trip.getUser().getId())
                     .id(trip.getId())
                     .tripName(trip.getTripName())
                     .tripStartDate(trip.getTripStartDate())
@@ -90,6 +100,12 @@ public class TripService {
         Trip trip = tripRepository.findById(tripId).orElseThrow(
                 () -> new TripNotFoundException(NO_TRIP.getMessage())
         );
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long tripUserId = trip.getUser().getId();
+
+        checkTripAuthorization(currentUserId, tripUserId);
+
         Integer numberOfItinerary = getNumberOfItinerary(tripId);
         trip.update(tripUpdateRequest);
         return TripUpdateResponse.fromEntity(trip, numberOfItinerary);
@@ -98,8 +114,20 @@ public class TripService {
     @Transactional
     public String deleteTrip(Long id) {
         Trip trip = validateTripEmpty(id);
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long tripUserId = trip.getUser().getId();
+
+        checkTripAuthorization(currentUserId, tripUserId);
+
         tripRepository.deleteById(id);
         return id+"번 여행이 삭제되었습니다.";
+    }
+
+    private void checkTripAuthorization(Long currentUserId, Long tripUserId) {
+        if (!currentUserId.equals(tripUserId)) {
+            throw new RuntimeException("해당 여행을 조작할 권한이 없습니다.");
+        }
     }
 
     private void validateTripUpdateRequest(Long tripId, TripUpdateRequest tripUpdateRequest) {
