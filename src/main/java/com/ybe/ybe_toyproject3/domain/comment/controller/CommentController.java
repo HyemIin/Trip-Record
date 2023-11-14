@@ -41,8 +41,10 @@ public class CommentController {
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripListResponse.class)))
     @FailApiResponses
     @GetMapping("/connection-users/{userId}")
-    public ResponseEntity<List<CommentReadResponse>> findAllCommentByUserId() {
-        return ResponseEntity.ok(commentService.findAllCommentByUserId());
+    public ResponseEntity<List<CommentReadResponse>> findAllCommentByUserId(
+            @PathVariable Long userId
+    ) {
+        return ResponseEntity.ok(commentService.findAllCommentByUserId(userId));
     }
     @Operation(summary = "댓글 수정 API", description = "특정 댓글을 수정하는 API입니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공 시", content = @Content(schema = @Schema(implementation = TripUpdateResponse.class)))

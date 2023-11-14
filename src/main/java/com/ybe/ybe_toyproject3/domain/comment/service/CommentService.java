@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.comment.service;
 import com.ybe.ybe_toyproject3.domain.comment.dto.*;
 import com.ybe.ybe_toyproject3.domain.comment.exception.CommentNotFoundException;
 import com.ybe.ybe_toyproject3.domain.comment.exception.DisableEditCommentException;
+import com.ybe.ybe_toyproject3.domain.comment.exception.DisableLookUpOtherUserInfoException;
 import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.comment.repository.CommentRepository;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
@@ -39,14 +40,18 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentReadResponse> findAllCommentByUserId() {
+    public List<CommentReadResponse> findAllCommentByUserId(Long userId) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
-        List<Comment> userPersonalComment = commentRepository.findAllByUserId(currentUserId);
-        List<CommentReadResponse> userCommentList = new ArrayList<>();
-        for (Comment comment : userPersonalComment) {
-            userCommentList.add(CommentReadResponse.fromEntity(comment));
+        if (userId == currentUserId) {
+            List<Comment> userPersonalComment = commentRepository.findAllByUserId(currentUserId);
+            List<CommentReadResponse> userCommentList = new ArrayList<>();
+            for (Comment comment : userPersonalComment) {
+                userCommentList.add(CommentReadResponse.fromEntity(comment));
+            }
+            return userCommentList;
+        } else {
+            throw new DisableLookUpOtherUserInfoException();
         }
-        return userCommentList;
     }
     @Transactional
     public CommentUpdateResponse editComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
@@ -65,8 +70,11 @@ public class CommentService {
         Comment deleteComment = validatedCommentNotEmpty(commentId);
         if (deleteComment.getUser().getId() == currentUserId) {
             commentRepository.deleteById(commentId);
+            return commentId + "번 댓글이 삭제되었습니다.";
+        } else {
+            throw new DisableEditCommentException();
         }
-        return commentId+ "번 댓글이 삭제되었습니다.";
+
     }
 
     private Comment validatedCommentNotEmpty(Long commentId) {
