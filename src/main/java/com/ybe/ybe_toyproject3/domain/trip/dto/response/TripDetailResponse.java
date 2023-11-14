@@ -19,6 +19,8 @@ import java.util.List;
 @Builder
 @ToString
 public class TripDetailResponse {
+    @Schema(description = "사용자 ID", defaultValue = "1")
+    private Long userid;
     @Schema(description = "여행 ID", defaultValue = "1")
     private Long id;
     @Schema(description = "여행 이름", defaultValue = "조회된 여행 이름")
@@ -47,6 +49,7 @@ public class TripDetailResponse {
                 .toList();
 
         return TripDetailResponse.builder()
+                .userid(trip.getUser().getId())
                 .id(trip.getId())
                 .tripName(trip.getTripName())
                 .tripStartDate(trip.getTripStartDate())
