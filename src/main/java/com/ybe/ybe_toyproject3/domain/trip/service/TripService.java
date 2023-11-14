@@ -94,16 +94,6 @@ public class TripService {
     }
 
     @Transactional
-    public TripResponse getTripById(Long tripId) {
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(
-                () -> new TripNotFoundException(NO_TRIP.getMessage())
-        );
-
-        return TripResponse.fromEntity(trip);
-    }
-
-    @Transactional
     public TripUpdateResponse editTripById(Long tripId, TripUpdateRequest tripUpdateRequest) {
 
         Integer num = tripRepository.countTripByIdAndTripName(tripId, tripUpdateRequest.getTripName());
