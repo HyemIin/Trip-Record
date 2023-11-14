@@ -1,5 +1,7 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.response;
 
+import com.ybe.ybe_toyproject3.domain.comment.dto.CommentReadResponse;
+import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryResponse;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
@@ -31,10 +33,18 @@ public class TripResponse {
     @Schema(description = "조회된 여행에 포함된 여정 목록")
     private List<ItineraryResponse> itineraryList;
 
+    @ArraySchema(schema = @Schema(implementation = CommentReadResponse.class))
+    private List<CommentReadResponse> commentList;
+
     public static TripResponse fromEntity(Trip trip) {
         List<ItineraryResponse> itineraryResponse = trip.getItineraryList()
                 .stream()
                 .map(ItineraryResponse::fromEntity)
+                .collect(Collectors.toList());
+
+        List<CommentReadResponse> commentReadResponses = trip.getCommentList()
+                .stream()
+                .map(CommentReadResponse::fromEntity)
                 .collect(Collectors.toList());
 
         return TripResponse.builder()
@@ -44,6 +54,7 @@ public class TripResponse {
                 .tripEndDate(trip.getTripEndDate())
                 .tripType(trip.getTripType())
                 .itineraryList(itineraryResponse)
+                .commentList(commentReadResponses)
                 .build();
     }
 }
