@@ -71,7 +71,8 @@ public class ItineraryService {
 
     @Transactional
     public ItineraryUpdateResponse editItinerary(
-            Long itineraryId, ItineraryUpdateRequest request
+            Long itineraryId, ItineraryUpdateRequest request,
+            Long tripId
     ) {
         String locationName = createLocation(request.getPlaceName());
 
@@ -87,7 +88,7 @@ public class ItineraryService {
     }
 
     @Transactional
-    public String deleteItinerary(Long itineraryId) {
+    public String deleteItinerary(Long itineraryId, Long tripId) {
         validateItinerary(itineraryId);
 
         Itinerary itinerary = itineraryRepository.findById(itineraryId).get();

@@ -65,7 +65,7 @@ public class TripController {
     public ResponseEntity<TripUpdateResponse> editTrip(
             @PathVariable Long tripId,
             @Valid @RequestBody TripUpdateRequest tripUpdateRequest) {
-        System.out.println("REQUEST SUCCESS");
+        //System.out.println("REQUEST SUCCESS");
         return ResponseEntity.ok(tripService.editTripById(tripId, tripUpdateRequest));
     }
 

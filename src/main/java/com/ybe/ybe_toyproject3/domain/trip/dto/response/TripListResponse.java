@@ -1,11 +1,13 @@
 package com.ybe.ybe_toyproject3.domain.trip.dto.response;
 
+import com.ybe.ybe_toyproject3.domain.comment.dto.CommentReadResponse;
 import com.ybe.ybe_toyproject3.global.common.type.TripType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,6 +25,8 @@ public class TripListResponse {
     private LocalDateTime tripEndDate;
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
+
+    private List<CommentReadResponse> commentReadResponseList = new ArrayList<>();
     //@ArraySchema(schema = @Schema(description = "조회된 여정 이름 목록"))
     //private List<String> itineraryNames;
 }

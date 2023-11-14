@@ -1,5 +1,6 @@
 package com.ybe.ybe_toyproject3.domain.trip.service;
 
+import com.ybe.ybe_toyproject3.domain.comment.dto.CommentReadResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.DUPLICATE_TRIP_NAME;
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.NO_TRIP;
@@ -83,13 +85,20 @@ public class TripService {
         }
 
         List<TripListResponse> tripListResponse = new ArrayList<>();
+        List<CommentReadResponse> commentReadResponses;
         for (Trip trip : tripList) {
+            commentReadResponses = trip.getCommentList()
+                    .stream()
+                    .map(CommentReadResponse::fromEntity)
+                    .collect(Collectors.toList());
+
             TripListResponse tripResponse = TripListResponse.builder()
                     .id(trip.getId())
                     .tripName(trip.getTripName())
                     .tripStartDate(trip.getTripStartDate())
                     .tripEndDate(trip.getTripEndDate())
                     .tripType(trip.getTripType())
+                    .commentReadResponseList(commentReadResponses)
                     .build();
 
             tripListResponse.add(tripResponse);
