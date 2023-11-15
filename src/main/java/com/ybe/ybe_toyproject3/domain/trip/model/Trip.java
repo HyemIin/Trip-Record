@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class Trip {
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Comment> commentList = new ArrayList<>();
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Likes> likesList = new ArrayList<>();
 
@@ -58,7 +60,7 @@ public class Trip {
         this.tripType = request.getTripType();
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         this.user = user;
     }
 }
