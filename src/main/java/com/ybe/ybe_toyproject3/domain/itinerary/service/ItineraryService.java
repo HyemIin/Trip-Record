@@ -17,7 +17,7 @@ import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.global.component.KakaoApiComponent;
 
-import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -35,6 +35,7 @@ public class ItineraryService {
     private final ItineraryRepository itineraryRepository;
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
+    private final SecurityUtilProvider securityUtil;
 
     private final KakaoApiComponent kakaoApiComponent;
 
@@ -42,14 +43,13 @@ public class ItineraryService {
     public ItineraryCreateResponse createItinerary(Long tripId, ItineraryCreateRequest itineraryCreateRequest)  {
         Trip trip = validateTrip(tripId);
 
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtil.getCurrentUserId();
         Long tripUserId = trip.getUser().getId();
 
         checkItineraryAuthorization(currentUserId, tripUserId);
 
         String locationName = createLocation(itineraryCreateRequest.getPlaceName());
         Location location = new Location(locationName);
-
 
         validateItineraryTimeRange(itineraryCreateRequest, trip);
         validateItineraryCreateRequest(itineraryCreateRequest);
@@ -83,7 +83,7 @@ public class ItineraryService {
     ) {
         Itinerary itinerary = validateItinerary(itineraryId);
 
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtil.getCurrentUserId();
         Long tripUserId = itinerary.getTrip().getUser().getId();
 
         checkItineraryAuthorization(currentUserId, tripUserId);
@@ -104,7 +104,7 @@ public class ItineraryService {
     public String deleteItinerary(Long itineraryId) {
         Itinerary itinerary = validateItinerary(itineraryId);
 
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtil.getCurrentUserId();
         Long tripUserId = itinerary.getTrip().getUser().getId();
 
         checkItineraryAuthorization(currentUserId, tripUserId);
