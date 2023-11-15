@@ -38,10 +38,12 @@ public class User {
     private final List<Likes> likesList = new ArrayList<>();
 
     @Builder
-    public User(String email, String name, String password, Authority authority) {
+    public User(String email, String name, String password, Authority authority, Long id) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.authority = authority;
+        //test위해 임시 추가
+        this.id = id;
     }
 }

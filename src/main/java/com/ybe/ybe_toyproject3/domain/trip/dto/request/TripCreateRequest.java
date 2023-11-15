@@ -5,6 +5,7 @@ import com.ybe.ybe_toyproject3.global.common.type.TripType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "상품 생성시 요청 데이터")
+@Builder
 public class TripCreateRequest {
     @Schema(description = "여행 명", defaultValue = "생성할 여행 이름")
     @NotNull
