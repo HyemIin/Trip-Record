@@ -80,14 +80,10 @@ public class AuthService {
 
     @Transactional
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        String username = getCurrentUsername();
         deleteCookie(response);
         return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
     }
 
-    private String getCurrentUsername() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
 
 
     private void deleteCookie(HttpServletResponse response) {
