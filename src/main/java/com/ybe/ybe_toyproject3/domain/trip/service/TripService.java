@@ -19,8 +19,11 @@ import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
 import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilImpl;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final ItineraryRepository itineraryRepository;
     private final UserRepository userRepository;
+    private final SecurityUtilProvider securityImpl;
 
     @Transactional
     public TripCreateResponse createTrip(TripCreateRequest tripCreateRequest) {
@@ -46,8 +50,8 @@ public class TripService {
             throw new InvalidTripScheduleException();
         }
         Trip trip = tripCreateRequest.toEntity();
-
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        //Provider로 수정한 상태
+        Long currentUserId = securityImpl.getCurrentUserId();
         User user = userRepository.getUserById(currentUserId);
         trip.addUser(user);
 
