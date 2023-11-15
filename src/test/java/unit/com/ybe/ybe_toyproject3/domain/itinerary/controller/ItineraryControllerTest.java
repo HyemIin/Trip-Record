@@ -1,6 +1,5 @@
-package com.ybe.ybe_toyproject3.domain.Itinerary.controller;
+package com.ybe.ybe_toyproject3.domain.itinerary.controller;
 
-import com.ybe.ybe_toyproject3.domain.itinerary.controller.ItineraryController;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryCreateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryCreateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.service.ItineraryService;

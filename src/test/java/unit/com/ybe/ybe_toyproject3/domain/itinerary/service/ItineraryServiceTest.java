@@ -1,9 +1,8 @@
-package com.ybe.ybe_toyproject3.domain.Itinerary.service;
+package com.ybe.ybe_toyproject3.domain.itinerary.service;
 
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.request.ItineraryCreateRequest;
 import com.ybe.ybe_toyproject3.domain.itinerary.dto.response.ItineraryCreateResponse;
 import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
-import com.ybe.ybe_toyproject3.domain.itinerary.service.ItineraryService;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 
 import com.ybe.ybe_toyproject3.domain.location.model.Location;
