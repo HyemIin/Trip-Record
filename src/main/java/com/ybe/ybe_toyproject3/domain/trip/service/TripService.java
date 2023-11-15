@@ -82,7 +82,7 @@ public class TripService {
         return TripDetailResponse.fromEntity(trip);
     }
 
-    private List<TripListResponse> toTripListResponseList(List<Trip> tripList) {
+    public List<TripListResponse> toTripListResponseList(List<Trip> tripList) {
         if (tripList.isEmpty()) {
             throw new TripNotFoundException(NO_TRIP.getMessage());
         }
