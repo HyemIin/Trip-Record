@@ -6,6 +6,7 @@ import com.ybe.ybe_toyproject3.domain.user.exception.UserNotFoundException;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
 import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final SecurityUtilProvider securityUtilProvider;
 
     @Transactional(readOnly = true)
     public UserInfo getUserInfo() {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilProvider.getCurrentUserId();
         User user = userRepository.findById(currentUserId).orElseThrow(UserNotFoundException::new);
         return UserInfo.builder()
                 .id(user.getId())
@@ -28,7 +30,7 @@ public class UserService {
 
     @Transactional
     public DeleteUserResponse deleteUser() {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilProvider.getCurrentUserId();
         if (!userRepository.existsById(currentUserId)) {
             throw new IllegalArgumentException("이미 삭제된 유저 입니다.");
         }
