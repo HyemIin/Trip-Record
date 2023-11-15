@@ -19,7 +19,6 @@ import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
 import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
-import com.ybe.ybe_toyproject3.global.util.SecurityUtilImpl;
 import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
