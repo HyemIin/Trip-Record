@@ -46,4 +46,15 @@ public class User {
         //test위해 임시 추가
         this.id = id;
     }
+
+    public User(String email, String name, String password, Authority authority) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.authority = authority;
+    }
+
+    public void addLikes(List<Likes> likesList) {
+        this.likesList.addAll(likesList);
+    }
 }
