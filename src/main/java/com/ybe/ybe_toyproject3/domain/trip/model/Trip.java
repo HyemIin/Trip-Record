@@ -63,4 +63,8 @@ public class Trip {
     public void addUser(User user) {
         this.user = user;
     }
+
+    public void updateTripId(Long id) {
+        this.id = id;
+    }
 }
