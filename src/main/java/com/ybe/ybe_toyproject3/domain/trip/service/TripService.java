@@ -100,7 +100,7 @@ public class TripService {
                 () -> new TripNotFoundException(NO_TRIP.getMessage())
         );
 
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         Long tripUserId = trip.getUser().getId();
 
         checkTripAuthorization(currentUserId, tripUserId);
@@ -114,7 +114,7 @@ public class TripService {
     public String deleteTrip(Long id) {
         Trip trip = validateTripEmpty(id);
 
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         Long tripUserId = trip.getUser().getId();
 
         checkTripAuthorization(currentUserId, tripUserId);
