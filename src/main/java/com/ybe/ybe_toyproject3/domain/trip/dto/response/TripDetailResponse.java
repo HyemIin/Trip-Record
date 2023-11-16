@@ -32,6 +32,8 @@ public class TripDetailResponse {
     @Schema(description = "여행 타입", defaultValue = "조회된 여행 타입")
     private TripType tripType;
 
+    Integer likesCount;
+
     private List<CommentReadResponse> commentsList;
 
     @ArraySchema(schema = @Schema(implementation = ItineraryResponse.class))
@@ -55,6 +57,7 @@ public class TripDetailResponse {
                 .tripStartDate(trip.getTripStartDate())
                 .tripEndDate(trip.getTripEndDate())
                 .tripType(trip.getTripType())
+                .likesCount(trip.getLikesList().size())
                 .itineraryList(itineraryResponse)
                 .commentsList(commentReadResponses)
                 .build();

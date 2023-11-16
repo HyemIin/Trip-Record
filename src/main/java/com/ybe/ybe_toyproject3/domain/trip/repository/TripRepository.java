@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface TripRepository extends JpaRepository<Trip, Long> {
     @Query("select t from Trip t join fetch t.user  left join fetch t.commentList")
     List<Trip> findAll();
-    //@Query("select t from Trip t where t.itineraryList = :itineraryList")
     Optional<Trip> findById(Long tripId);
 
     Boolean existsByTripName(String tripName);
