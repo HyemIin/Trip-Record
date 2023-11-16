@@ -20,7 +20,7 @@ class TripRepositoryTest {
     @Transactional
     @Test
     void findTripByTripNameContaining() {
-        Optional<Trip> trip = tripRepository.findTripByTripNameContaining("nc");
+        Optional<Trip> trip = tripRepository.findTripByTripNameContaining("야놀ㅈ");
         System.out.println(TripResponse.fromEntity(trip.get()).toString());
     }
 }
