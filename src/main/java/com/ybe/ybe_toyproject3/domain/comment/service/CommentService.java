@@ -9,10 +9,9 @@ import com.ybe.ybe_toyproject3.domain.comment.repository.CommentRepository;
 import com.ybe.ybe_toyproject3.domain.trip.exception.TripNotFoundException;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
-import com.ybe.ybe_toyproject3.domain.user.exception.UserNotFoundException;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
-import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +25,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final SecurityUtilProvider securityUtilImpl;
 
 
     @Transactional
@@ -41,7 +41,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentReadResponse> findAllCommentByUserId(Long userId) {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         if (userId == currentUserId) {
             List<Comment> userPersonalComment = commentRepository.findAllByUserId(currentUserId);
             List<CommentReadResponse> userCommentList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class CommentService {
     }
     @Transactional
     public CommentUpdateResponse editComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         Comment editComment = validatedCommentNotEmpty(commentId);
         if (currentUserId.equals(editComment.getUser().getId())) {
             editComment.updateComment(commentUpdateRequest.getContent());
@@ -66,7 +66,7 @@ public class CommentService {
     }
     @Transactional
     public String deleteComment(Long commentId) {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         Comment deleteComment = validatedCommentNotEmpty(commentId);
         if (deleteComment.getUser().getId() == currentUserId) {
             commentRepository.deleteById(commentId);
@@ -86,7 +86,7 @@ public class CommentService {
     }
 
     private User validatedUserNotEmpty() {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
-        return userRepository.findById(currentUserId).orElseThrow(UserNotFoundException::new);
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
+        return userRepository.getUserById(currentUserId);
     }
 }
