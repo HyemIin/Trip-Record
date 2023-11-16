@@ -4,6 +4,7 @@ import com.ybe.ybe_toyproject3.domain.itinerary.model.Itinerary;
 
 import jakarta.persistence.*;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ public class Location {
     @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
 
+    @Builder
     public Location(String locationName) {
         this.locationName = locationName;
     }

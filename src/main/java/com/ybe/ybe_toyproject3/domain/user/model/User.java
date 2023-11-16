@@ -46,4 +46,8 @@ public class User {
         //test위해 임시 추가
         this.id = id;
     }
+
+    public void setId(Long userId) {
+        this.id = userId;
+    }
 }

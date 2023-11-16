@@ -41,7 +41,7 @@ public class Itinerary {
     private Location location;
 
     @Builder
-    public Itinerary(String itineraryName, String transportation, String departCity, String arriveCity, LocalDateTime cityDepartTime, LocalDateTime cityArriveTime, String accommodation, LocalDateTime checkInTime, LocalDateTime checkOutTime, String placeName, LocalDateTime placeArriveTime, LocalDateTime placeDepartTime, Location location) {
+    public Itinerary(String itineraryName, String transportation, String departCity, String arriveCity, LocalDateTime cityDepartTime, LocalDateTime cityArriveTime, String accommodation, LocalDateTime checkInTime, LocalDateTime checkOutTime, String placeName, LocalDateTime placeArriveTime, LocalDateTime placeDepartTime, Trip trip, Location location) {
         this.itineraryName = itineraryName;
         this.transportation = transportation;
         this.departCity = departCity;
@@ -54,6 +54,7 @@ public class Itinerary {
         this.placeName = placeName;
         this.placeDepartTime = placeDepartTime;
         this.placeArriveTime = placeArriveTime;
+        this.trip = trip;
         this.location = location;
     }
 
