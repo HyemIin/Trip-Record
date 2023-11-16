@@ -41,5 +41,5 @@
 #### 4-2. 인가 관리
 * 여행 및 여정 조작 시 인증된 회원에 따른 인가 관리
 
-## ERD
+## 📌 ERD
 ![image](https://github.com/FC-BE-ToyProject-Team3/KDT_Y_BE_Toy_Project3/assets/139152515/a3cc7c0b-f550-46ff-b519-0c2ad081f159)
