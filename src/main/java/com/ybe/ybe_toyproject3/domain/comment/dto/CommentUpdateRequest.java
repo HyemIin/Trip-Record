@@ -2,14 +2,12 @@ package com.ybe.ybe_toyproject3.domain.comment.dto;
 
 import com.ybe.ybe_toyproject3.domain.comment.model.Comment;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@Builder
 public class CommentUpdateRequest {
     @NotNull
     private String content;
