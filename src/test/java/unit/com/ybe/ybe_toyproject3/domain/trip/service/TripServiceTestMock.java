@@ -3,6 +3,7 @@ package com.ybe.ybe_toyproject3.domain.trip.service;
 import com.ybe.ybe_toyproject3.domain.itinerary.repository.ItineraryRepository;
 import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripCreateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
+import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
 import com.ybe.ybe_toyproject3.domain.trip.model.Trip;
 import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
@@ -18,12 +19,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import static com.ybe.ybe_toyproject3.global.common.type.TripType.DOMESTIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TripServiceTestMock {
@@ -39,6 +42,8 @@ public class TripServiceTestMock {
 
     @Mock
     private SecurityUtilProvider securityUtil;
+
+    private static final String SEARCH_CONDITION = "일본";
 
     @Test
     @DisplayName("여행생성 테스트")
@@ -81,7 +86,60 @@ public class TripServiceTestMock {
         Trip savedTrip = captor.getValue();
         assertEquals("여행1", savedTrip.getTripName());
         assertEquals(DOMESTIC, savedTrip.getTripType());
+    }
+
+    @Test
+    @DisplayName("여행조회 테스트")
+    public void findAllTripTest() throws Exception {
+        TripCreateRequest tripCreateRequest1 = TripCreateRequest.builder()
+                .tripName("일본")
+                .tripStartDate(LocalDateTime.now().minusDays(10))
+                .tripEndDate(LocalDateTime.now().minusDays(1))
+                .tripType(DOMESTIC)
+                .build();
+        TripCreateRequest tripCreateRequest2 = TripCreateRequest.builder()
+                .tripName("중국")
+                .tripStartDate(LocalDateTime.now().minusDays(10))
+                .tripEndDate(LocalDateTime.now().minusDays(1))
+                .tripType(DOMESTIC)
+                .build();
+        Trip trip = tripCreateRequest1.toEntity();
+        Trip trip2 = tripCreateRequest2.toEntity();
+        User user = User.builder()
+                .id(1L)
+                .name("cha")
+                .email("cdm2883@naver.com")
+                .password("1234")
+                .authority(Authority.ROLE_USER)
+                .build();
+
+        trip.addUser(user);
+        trip2.addUser(user);
+
+        List<Trip> tripList = List.of(trip, trip2);
 
 
+        List<TripListResponse> tripListResponseList = new ArrayList<>();
+
+        for (var t : tripList) {
+            TripListResponse tripListResponse = TripListResponse.fromEntity(t);
+            tripListResponseList.add(tripListResponse);
+        }
+        assertEquals(2, tripListResponseList.size());
+
+        when(tripRepository.findAll()).thenReturn(tripList);
+        when(tripRepository.findAllByTripNameContaining(SEARCH_CONDITION))
+                .thenReturn(tripList.stream()
+                        .filter(t -> t.getTripName().startsWith(SEARCH_CONDITION)||
+                                t.getTripName().endsWith(SEARCH_CONDITION))
+                        .toList());
+
+        List<TripListResponse> tripListResponses = tripService.findAllTrips(null);
+        List<TripListResponse> tripListResponsesWithSearchCondition = tripService.findAllTrips(SEARCH_CONDITION);
+
+        assertEquals(2, tripListResponses.size());
+        assertEquals(1, tripListResponsesWithSearchCondition.size());
+        System.out.println(tripListResponsesWithSearchCondition.stream().map(TripListResponse::getTripName));
+//
     }
 }
