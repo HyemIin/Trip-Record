@@ -13,7 +13,7 @@ import com.ybe.ybe_toyproject3.domain.trip.repository.TripRepository;
 import com.ybe.ybe_toyproject3.domain.user.exception.UserNotFoundException;
 import com.ybe.ybe_toyproject3.domain.user.model.User;
 import com.ybe.ybe_toyproject3.domain.user.repository.UserRepository;
-import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
+import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,7 @@ public class LikesService {
     private final LikesRepository likesRepository;
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final SecurityUtilProvider securityUtilImpl;
 
     @Transactional
     public TripLikesCreateResponse createLikes(Long tripId) {
@@ -38,7 +39,7 @@ public class LikesService {
                 () -> new TripNotFoundException(NO_TRIP.getMessage()));
 
         //헤더에 있는 토큰 가지고 userId 받기
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long userId = securityUtilImpl.getCurrentUserId();
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(NO_USER.getMessage())
         );
@@ -59,7 +60,7 @@ public class LikesService {
                 () -> new TripNotFoundException(NO_TRIP.getMessage()));
 
         //헤더에 있는 토큰 가지고 userId 받기
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long userId = securityUtilImpl.getCurrentUserId();
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(NO_USER.getMessage())
         );
@@ -75,7 +76,7 @@ public class LikesService {
 
     @Transactional
     public List<TripListResponse> getTripsUserLikes() {
-        Long userId = SecurityUtil.getCurrentUserId();
+        Long userId = securityUtilImpl.getCurrentUserId();
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(NO_USER.getMessage())
         );
