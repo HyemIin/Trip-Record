@@ -1,3 +1,7 @@
+## 📌 API 문서
+[Toy Project 3 API 문서](https://gifted-feet-c42.notion.site/Toy-Project-3-API-78055894df504505ad73b39e83f1676d#876ccfd66857429fa05a5227bc0eecca)
+## 📌 Postman 실행 화면
+[Postman 실행 화면](https://www.notion.so/3-f57a1bb8dc244d859db99d4768402b23?p=4fe16400b0944d15b258fe64cb9b041b&pm=s)
 ## 📌 세부 기능 구현
 ### 1. 사용자 인증 API 구현
 #### 1-1. 회원가입
