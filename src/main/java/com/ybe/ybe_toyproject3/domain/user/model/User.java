@@ -47,6 +47,17 @@ public class User {
         this.id = id;
     }
 
+    public User(String email, String name, String password, Authority authority) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.authority = authority;
+    }
+
+    public void addLikes(List<Likes> likesList) {
+        this.likesList.addAll(likesList);
+    }
+
     public void setId(Long userId) {
         this.id = userId;
     }

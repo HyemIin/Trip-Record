@@ -1,6 +1,5 @@
 package com.ybe.ybe_toyproject3.global.util;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

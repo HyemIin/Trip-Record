@@ -8,7 +8,6 @@ import com.ybe.ybe_toyproject3.domain.trip.dto.request.TripUpdateRequest;
 import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripCreateResponse;
 import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripDetailResponse;
 import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripListResponse;
-import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripResponse;
 import com.ybe.ybe_toyproject3.domain.trip.dto.response.TripUpdateResponse;
 import com.ybe.ybe_toyproject3.domain.trip.exception.DuplicateTripNameException;
 import com.ybe.ybe_toyproject3.domain.trip.exception.InvalidTripScheduleException;
@@ -22,15 +21,11 @@ import com.ybe.ybe_toyproject3.global.util.SecurityUtil;
 import com.ybe.ybe_toyproject3.global.util.SecurityUtilProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ybe.ybe_toyproject3.global.common.ErrorCode.*;
 
@@ -41,7 +36,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final ItineraryRepository itineraryRepository;
     private final UserRepository userRepository;
-    private final SecurityUtilProvider securityImpl;
+    private final SecurityUtilProvider securityUtilImpl;
 
     @Transactional
     public TripCreateResponse createTrip(TripCreateRequest tripCreateRequest) {
@@ -50,7 +45,7 @@ public class TripService {
         }
         Trip trip = tripCreateRequest.toEntity();
         //Provider로 수정한 상태
-        Long currentUserId = securityImpl.getCurrentUserId();
+        Long currentUserId = securityUtilImpl.getCurrentUserId();
         User user = userRepository.getUserById(currentUserId);
         trip.addUser(user);
 
