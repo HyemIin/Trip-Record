@@ -30,14 +30,12 @@ public class Trip {
     @Enumerated(EnumType.STRING)
     private TripType tripType;
 
-    // @JsonManagedReference
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Itinerary> itineraryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Comment> commentList = new ArrayList<>();
 
-    @BatchSize(size = 100)
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Likes> likesList = new ArrayList<>();
 

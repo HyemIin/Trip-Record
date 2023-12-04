@@ -32,7 +32,6 @@ class CommentRepositoryTest {
                 .email("testuser@email.com")
                 .name("testuser")
                 .build();
-
         //when
         List<Comment> commentList = commentRepository.findAllByUserId(userInfo.getId());
         int count = 0;
