@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
-    @Query("select t from Trip t join fetch t.user  left join fetch t.commentList")
+//    @Query("select t from Trip t join fetch t.user  left join fetch t.likesList")
     List<Trip> findAll();
     Optional<Trip> findById(Long tripId);
 
