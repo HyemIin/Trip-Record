@@ -1,6 +1,6 @@
 ## 📌 API 문서
 
-[Toy Project 3 API 문서](https://gifted-feet-c42.notion.site/Toy-Project-3-API-78055894df504505ad73b39e83f1676d#876ccfd66857429fa05a5227bc0eecca)
+[API 문서](https://gifted-feet-c42.notion.site/Toy-Project-3-API-78055894df504505ad73b39e83f1676d#876ccfd66857429fa05a5227bc0eecca)
 
 ## 📌 Postman 실행 화면
 
